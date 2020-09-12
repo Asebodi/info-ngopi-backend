@@ -3,6 +3,9 @@ const app = express();
 const mongoose = require("mongoose");
 
 app.use(express.json());
+require("dotenv").config();
+
+const register = require("./routes/register");
 
 const PORT = process.env.PORT || 4500;
 
@@ -22,5 +25,7 @@ async function dbConnect() {
     process.exit(1);
   }
 }
+
+app.use("/register", register);
 
 app.listen(PORT, () => console.log(`Server started at ${PORT}`));
