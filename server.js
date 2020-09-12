@@ -22,3 +22,5 @@ async function dbConnect() {
     process.exit(1);
   }
 }
+
+app.listen(PORT, () => console.log(`Server started at ${PORT}`));
