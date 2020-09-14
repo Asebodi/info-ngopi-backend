@@ -4,6 +4,7 @@ const User = mongoose.Schema({
     type: String,
     required: true,
   },
+  // photo???
   username: {
     type: String,
     required: true,
@@ -17,6 +18,18 @@ const User = mongoose.Schema({
     type: String,
     required: true,
   },
+  favorite: [
+    {
+      cafe: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cafes",
+      },
+      // photo??
+      cafeName: String,
+      cafeGrade: Number,
+      cafePrice: Number,
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,
