@@ -35,7 +35,14 @@ router.post(
         return res.status(401).send("Email sudah terdaftar!");
       }
 
-      user = new User({ name, username, email, password });
+      user = new User({
+        name,
+        username,
+        email,
+        password,
+        favorite: [],
+        reviews: [],
+      });
 
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
