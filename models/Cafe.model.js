@@ -28,6 +28,19 @@ const Cafe = mongoose.Schema({
       },
     },
   ],
+  facility: [
+    {
+      outlet: Boolean,
+      wifi: Boolean,
+      laptopFriendly: Boolean,
+      ac: Boolean,
+      fan: Boolean,
+      games: Boolean,
+      food: Boolean,
+      toilet: Boolean,
+      parkingSpace: Boolean,
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,
