@@ -30,6 +30,21 @@ const User = mongoose.Schema({
       cafePrice: Number,
     },
   ],
+  reviews: [
+    {
+      cafe: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Cafes",
+      },
+      rate: Number,
+      cafeName: String,
+      comment: String,
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,
