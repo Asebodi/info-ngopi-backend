@@ -4,7 +4,9 @@ const { check, validationResult } = require("express-validator");
 
 const auth = require("../middleware/auth");
 const Cafe = require("../models/Cafe.model");
+const User = require("../models/User.model");
 
+// GET ALL CAFES
 router.get("/", async (req, res) => {
   if (!req.query) {
     try {
@@ -40,7 +42,14 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { cafeName, cafeGrade, cafePrice, location, description } = req.body;
+    const {
+      cafeName,
+      cafeGrade,
+      cafePrice,
+      location,
+      description,
+      facility,
+    } = req.body;
 
     const avgRating = 0;
     const totalReviews = 0;
@@ -55,6 +64,7 @@ router.post(
       avgRating,
       totalReviews,
       reviews: [],
+      facility,
     };
 
     try {
@@ -90,6 +100,11 @@ router.post(
         return res.status(404).send("Cafe tidak ditemukan");
       }
 
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return res.status(404).send("Pengguna tidak ditemukan");
+      }
+
       const { rate, name, comment } = req.body;
 
       const addRating = {
@@ -99,7 +114,15 @@ router.post(
         comment: comment ? comment : "",
       };
 
+      const rateHistory = {
+        cafe: req.params.cafe_id,
+        rate,
+        cafeName: cafe.cafeName,
+        comment: comment ? comment : "",
+      };
+
       cafe.reviews.unshift(addRating);
+      user.reviews.unshift(rateHistory);
 
       let ratingSum = 0;
       const reviewSum = cafe.reviews.length;
@@ -120,5 +143,22 @@ router.post(
     }
   }
 );
+
+// CAFE SEARCH
+router.post("/search", async (req, res) => {
+  const { searchQuery } = req.body;
+
+  try {
+    const cafe = await Cafe.find({ cafeName: searchQuery });
+    if (!cafe) {
+      return res.status(404).send("Kedai kopi tidak ditemukan");
+    }
+
+    res.json(cafe);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
+});
 
 module.exports = router;
